@@ -68,7 +68,7 @@ if __name__ == '__main__':
         alpha=alpha)
 
     print('=================================================================')
-    print('Gradient descent     : ' + str(lm_regression))
+    print('Levenberg Marquardt descent : ' + str(lm_regression))
     print('Number of iterations : ' + str(iterations))
     print('=================================================================')
 

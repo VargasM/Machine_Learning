@@ -48,9 +48,6 @@ class MSECost:
     def cost_and_derivatives(self, theta, only_cost=False):
         b = np.matrix(theta[:, 0])
         w = np.matrix(theta[:, 1:])
-        print(b.shape)
-        print(w.shape)
-        print(self.m_uX.shape)
 
         j = \
             (w @ self.m_XtX @ w.T) + \
