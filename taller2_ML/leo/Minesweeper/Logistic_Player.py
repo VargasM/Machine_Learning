@@ -11,13 +11,14 @@ from Optimizer.GradientDescent import GradientDescent
 from Regression.MaximumLikelihood import MaximumLikelihood
 
 # -------------------------------------------------------------------------
-if len(sys.argv) < 4:
-    print("Usage: python", sys.argv[0], "width height mines")
+if len(sys.argv) < 5:
+    print("Usage: python", sys.argv[0], "width height mines training_file_name")
     sys.exit(1)
 # end if
 w = int(sys.argv[1])
 h = int(sys.argv[2])
 m = int(sys.argv[3])
+training_filename = sys.argv[4]
 board = MineSweeperBoard(w, h, m)
 
 neighbours = [
@@ -39,32 +40,7 @@ init_theta = np.zeros((1, 8))
 
 # First board is going to be used to train the model
 training_board = board.m_Mines
-"""training_data = []
-
-training_data += [[0, 0, 0, 0, 0, 0, 0, 0, 1], [0, 0, 0, 0, 0, 0, 0, 0, 1], [0, 0, 0, 0, 0, 0, 0, 0, 1], [0, 0, 0, 0, 0, 0, 0, 0, 1]]
-
-for i in range(0, int(w/2)):
-    for j in range(0, int(h/2)):
-        row_info = []
-        for n in neighbours:
-            n_i = i + n[0]
-            n_j = j + n[1]
-
-            if n_i < 0 or n_j < 0 or n_i >= w or n_j >= h:
-                row_info += [9]
-            else:
-                row_info += [training_board[n_i][n_j]]
-
-        if training_board[i][j] == 9:
-            row_info += [0]
-        else:
-            row_info += [1]
-
-        training_data += [row_info]
-
-training_data = np.array(training_data)
-"""
-training_data = np.loadtxt(fname='../Buscaminas_9.csv', delimiter=',')
+training_data = np.loadtxt(fname=training_filename, delimiter=',')
 
 x0 = training_data[:, :-1]
 y0 = training_data[:, -1]
