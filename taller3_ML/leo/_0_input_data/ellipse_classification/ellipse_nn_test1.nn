@@ -1,7 +1,4 @@
 draft
 2 32 ReLU
-32 32 ArcTan
-32 64 Tanh
-64 32 Tanh
-32 2 Logistic
+32 1 Logistic
 0 0

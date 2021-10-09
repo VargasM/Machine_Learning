@@ -20,7 +20,7 @@ class Cost:
         plot.ion()
         self.m_Fig, self.m_Axes = plot.subplots(nrows, ncols, sharey=False)
 
-        if isinstance(self.m_Axes, (numpy.ndarray)):
+        if isinstance(self.m_Axes, numpy.ndarray):
             self.m_CostAxis = self.m_Axes[0]
         else:
             self.m_CostAxis = self.m_Axes

@@ -64,9 +64,10 @@ if __name__ == "__main__":
         neural_network.LoadParameters(args.neural_network_parameters)
 
     y_est = neural_network(X_tst)
-
+    y_est = np.round(y_est)
     # Compute network accuracy
-    res = y_tst * y_est
+
+    res = np.where(y_tst == y_est, 1, 0)
     network_accuracy = res.sum() / res.shape[0]
 
     print(neural_network)

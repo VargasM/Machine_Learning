@@ -1,3 +1,4 @@
+import sys
 import numpy as np
 
 from Data import Normalize
@@ -5,6 +6,12 @@ from Debug.Cost import Cost
 from Helper.Parser.ArgParse import ArgParse
 from Optimizer.GradientDescent import GradientDescent
 from Model.NeuralNetwork.FeedForward import FeedForward
+
+
+def debug_function(model, j, dj, i, show):
+    if show:
+        print("Iteration: ", i, ". Cost: ", j)
+
 
 if __name__ == '__main__':
     parser = ArgParse()
@@ -39,23 +46,40 @@ if __name__ == '__main__':
         cost = FeedForward.Cost(x_train, y_train, neural_network, batch_size=args.batch_size)
         cost.SetPropagationTypeToCategoricalCrossEntropy()
 
-        # Configure debug function
-        debug = Cost()
-
         GradientDescent(
             cost,
+            learning_rate=args.learning_rate,
             max_iter=args.max_iterations,
             epsilon=args.epsilon,
             regularization=args.regularization,
             reg_type=args.reg_type,
             debug_step=args.debug_step,
-            debug_function=debug
+            debug_function=debug_function
         )
-
-        debug.KeepFigures()
 
         if args.nn_output != 'None':
             neural_network.SaveParameters(args.nn_output)
 
     else:
         neural_network.LoadParameters(args.neural_network_parameters)
+
+    # To test the neural network:
+
+    # -- Categorize examples
+    m = y_test.shape[0]
+    p = neural_network.GetLayerOutputSize(1)
+    eP = np.eye(p)
+    y_test_cat = eP[y_test, ].reshape(m, p)
+
+    # -- Estimate all examples
+    y_estimation = neural_network(x_test)
+    y_estimation_cat = eP[np.argmax(y_estimation, axis=1), ].reshape(m, p)
+
+    # -- Confusion matrix and accuracy
+    K = y_test_cat.T @ y_estimation_cat
+    acc = np.diag(K).sum() / K.sum()
+    print('=====================================')
+    np.savetxt(sys.stdout, K, fmt='% 5d')
+    print('=====================================')
+    print('Accuracy = ' + str(acc * 100) + '%')
+    print('=====================================')

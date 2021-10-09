@@ -1,4 +1,4 @@
 draft
-2 32 ReLU
-32 1 BinaryStep
+2 16 ReLU
+16 1 Logistic
 0 0

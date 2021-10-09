@@ -428,7 +428,9 @@ class FeedForward:
                 ).sum()
                 J = -(p + n) / float(self.m_Batches[batch][1].shape[0])
             elif self.m_Propagation == 'cce':
-                pass
+                p = numpy.multiply(self.m_Batches[batch][1], -numpy.log(Yp + self.m_Eps))
+                p = p.sum(axis=1)
+                J = p.mean()
             # end if
 
             return J
@@ -466,7 +468,7 @@ class FeedForward:
                 d = \
                     2.0 * \
                     numpy.array(d) * \
-                    numpy.array(self.m_Model.m_S[-1](Z[-1]), derivative=True)
+                    numpy.array(self.m_Model.m_S[-1](Z[-1], derivative=True))
                 D = [d]
             elif self.m_Propagation == 'bce' or self.m_Propagation == 'cce':
                 D = [d]
