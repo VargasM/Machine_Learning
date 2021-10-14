@@ -35,6 +35,7 @@ if __name__ == '__main__':
     y_test = np.reshape(y_test, (y_test.shape[0], 1))
 
     x_train, x_off, x_div = Normalize.Center(x_train)
+    x_test, _, _ = Normalize.Center(x_test)
 
     neural_network = FeedForward()
 
@@ -67,7 +68,7 @@ if __name__ == '__main__':
 
     # -- Categorize examples
     m = y_test.shape[0]
-    p = neural_network.GetLayerOutputSize(1)
+    p = neural_network.GetLayerOutputSize(-1)
     eP = np.eye(p)
     y_test_cat = eP[y_test, ].reshape(m, p)
 

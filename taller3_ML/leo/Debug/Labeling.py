@@ -3,6 +3,7 @@
 ## =========================================================================
 
 from .Cost import *
+import matplotlib.pyplot as plot
 
 '''
 '''
@@ -45,6 +46,7 @@ class Labeling(Cost):
             color='orange', marker='+', label='ones'
         )
         self.m_DataAxis.legend()
+        plot.show()
         self.m_DataContour = None
 
     # end def

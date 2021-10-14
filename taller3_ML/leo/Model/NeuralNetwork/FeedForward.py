@@ -428,7 +428,11 @@ class FeedForward:
                 ).sum()
                 J = -(p + n) / float(self.m_Batches[batch][1].shape[0])
             elif self.m_Propagation == 'cce':
-                p = numpy.multiply(self.m_Batches[batch][1], -numpy.log(Yp + self.m_Eps))
+                binary_matrix = numpy.zeros(Yp.shape)
+                expected_categories = self.m_Batches[batch][1]
+                for i in range(expected_categories.shape[0]):
+                    binary_matrix[i, expected_categories[i, 0]] = 1
+                p = numpy.multiply(binary_matrix, -numpy.log(Yp + self.m_Eps))
                 p = p.sum(axis=1)
                 J = p.mean()
             # end if
