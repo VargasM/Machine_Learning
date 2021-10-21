@@ -1,5 +1,7 @@
 import numpy as np
 
+from Debug import Labeling
+from Optimizer.ADAM import ADAM
 from Model.SVM import SVM
 from Data import Algorithms
 from Helper.Parser.ArgParse import ArgParse
@@ -15,7 +17,21 @@ if __name__ == '__main__':
 
     X_tra, y_tra, X_tst, y_tst, *_ = Algorithms.SplitData(input_data, 1, train_size=0.7, test_size=0.3)
 
+    # Create SVM model
     svm = SVM(in_x=X_tra, in_y=y_tra)
 
+    # Create cost function for SVM
     cost = SVM.Cost(svm)
-    print(cost.CostAndGradient(theta=0.5, batch=0, alpha=0))
+
+    # Define debug function
+    debug_function = Labeling(X_tra, y_tra, threshold=0.5)
+
+    # Call ADAM optimizer
+    ADAM(
+        cost=cost,
+        learning_rate=args.learning_rate,
+        regularization=args.regularization,
+        debug_step=args.debug_step,
+        debug_function=debug_function
+    )
+

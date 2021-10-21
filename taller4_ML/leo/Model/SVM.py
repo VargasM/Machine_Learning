@@ -20,12 +20,12 @@ class SVM(Base):
             'Invalid parameters type (' + str(type(t)) + ')'
 
         m_t = np.matrix(t).flatten()
-        self.m_weights = m_t[:, 1:].T
+        self.m_weights = m_t[:, 1:]
         self.m_bias = m_t[0, 0]
 
     def GetInputSize(self):
         if not self.m_weights is None:
-            return self.m_weights.shape[0]
+            return self.m_weights.shape[1]
         else:
             return 0
 
@@ -35,7 +35,7 @@ class SVM(Base):
             t[0, 0] = self.m_bias
         # end if
         if not self.m_weights is None:
-            t[:, 1:] = self.m_weights.T
+            t[:, 1:] = self.m_weights
         # end if
         return t
 
@@ -66,6 +66,9 @@ class SVM(Base):
 
         def GetModel(self):
             return self.m_model
+
+        def GetNumberOfBatches(self):
+            return len(self.m_Batches)
 
         def loss_matrix(self, batch):
             m_loss = np.multiply(self.m_model.m_weights, self.m_Batches[batch][0]).sum(axis=1) - self.m_model.m_bias
