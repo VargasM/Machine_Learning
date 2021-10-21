@@ -3,6 +3,7 @@
 ## =========================================================================
 
 import numpy
+from scipy.special import softmax
 from .Base import *
 
 '''
@@ -21,7 +22,8 @@ class SoftMax( Base ):
     if derivative:
       return None
     else:
-      e = numpy.exp(z - numpy.max(z))
+      e = softmax(z)
+      #e = numpy.exp(z - numpy.max(z))
       s = e.sum( )
       return e / s
     # end if
