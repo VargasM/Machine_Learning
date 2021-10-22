@@ -33,12 +33,12 @@ class Labeling(Cost):
             axis=1
         )
 
-        xN = x[numpy.where(y[:, 0] == 0)[0], :]
+        xN = x[numpy.where(y[:, 0] == -1)[0], :]
         xP = x[numpy.where(y[:, 0] == 1)[0], :]
 
         self.m_DataAxis.scatter(
             [xN[:, 0]], [xN[:, 1]],
-            color='blue', marker='x', label='zeros'
+            color='blue', marker='x', label='negative_ones'
         )
         self.m_DataAxis.scatter(
             [xP[:, 0]], [xP[:, 1]],
@@ -56,12 +56,13 @@ class Labeling(Cost):
         super().__call__(model, J, dJ, i, show)
 
         if show:
+            print(J)
             z = model(self.m_Data)
-            if not self.m_Threshold is None:
+            if self.m_Threshold is not None:
                 z = (z >= self.m_Threshold).astype(self.m_DX.dtype)
             # end if
             z = z.reshape(self.m_DX.shape)
-            if self.m_DataContour != None:
+            if self.m_DataContour is not None:
                 for c in self.m_DataContour.collections:
                     c.remove()
                 # end for

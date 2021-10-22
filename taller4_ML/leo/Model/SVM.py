@@ -39,6 +39,21 @@ class SVM(Base):
         # end if
         return t
 
+    def __call__(self, *args, **kwargs):
+        assert len(args) > 0, 'No arguments passed to __call__()'
+
+        if len(args) == 1:
+            assert isinstance(args[0], self.m_ValidTypes)
+            if isinstance(args[0], np.matrix):
+                x = args[0]
+            else:
+                x = np.matrix(args[0])
+            # end if
+        else:
+            x = np.matrix(list(args))
+
+        return np.multiply(x, self.m_weights).sum(axis=1) + self.m_bias
+
     class Cost:
 
         m_Eps = 1e-8
@@ -80,7 +95,6 @@ class SVM(Base):
             self.m_model.SetParameters(theta)
             loss_matrix = self.loss_matrix(batch)
 
-            # TODO: Check regularization factor
             cost = np.where(loss_matrix >= 1, 0, 1 - loss_matrix).mean() + \
                 alpha * (np.linalg.norm(self.m_model.m_weights) ** 2 + self.m_model.m_bias ** 2)
             return cost, loss_matrix
@@ -92,11 +106,8 @@ class SVM(Base):
         def CostAndGradient(self, theta, batch, alpha):
             cost, loss_matrix = self._Cost(theta, batch, alpha)
 
-            estimations = np.multiply(self.m_model.m_weights, self.m_Batches[batch][0]).sum(
-                axis=1) - self.m_model.m_bias
-            # TODO: Check X(k,i) value.
-            d_w = np.where(loss_matrix >= 1, 0, np.multiply(-self.m_Batches[batch][1], estimations)).mean() + \
-                  (2 * alpha * self.m_model.m_weights)
+            d_w = np.where(loss_matrix >= 1, 0, np.multiply(-self.m_Batches[batch][1], self.m_Batches[batch][0])).mean() + \
+                (2 * alpha * self.m_model.m_weights)
 
             d_b = np.matrix(np.where(loss_matrix >= 1, 0, self.m_Batches[batch][1] * self.m_model.m_bias).mean() +
                             (2 * alpha * self.m_model.m_bias))

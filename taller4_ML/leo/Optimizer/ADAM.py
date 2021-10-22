@@ -72,5 +72,6 @@ def ADAM(cost, **kwargs):
 
             # Execute debug function
             if debug_function is not None:
-                stop = debug_function(cost.getModel(), it_cost, delta_cost, t, t % debug_step == 0)
+                stop = debug_function(cost.GetModel(), it_cost, delta_cost, t, t % debug_step == 0)
 
+        t += 1

@@ -3,7 +3,7 @@ import numpy as np
 from Debug import Labeling
 from Optimizer.ADAM import ADAM
 from Model.SVM import SVM
-from Data import Algorithms
+from Data import Algorithms, Normalize
 from Helper.Parser.ArgParse import ArgParse
 
 
@@ -16,6 +16,8 @@ if __name__ == '__main__':
     np.random.shuffle(input_data)
 
     X_tra, y_tra, X_tst, y_tst, *_ = Algorithms.SplitData(input_data, 1, train_size=0.7, test_size=0.3)
+    X_tra, X_off, X_div = Normalize.Standardize(X_tra)
+    X_tst = (X_tst - X_off) / X_div
 
     # Create SVM model
     svm = SVM(in_x=X_tra, in_y=y_tra)
@@ -32,6 +34,11 @@ if __name__ == '__main__':
         learning_rate=args.learning_rate,
         regularization=args.regularization,
         debug_step=args.debug_step,
-        debug_function=debug_function
+        debug_function=debug_function,
+        max_iter=args.max_iterations
     )
+
+    y_est = svm(X_tst)
+
+    debug_function.KeepFigures()
 
