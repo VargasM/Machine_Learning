@@ -1,0 +1,7 @@
+draft
+784 256 Logistic
+256 128 Tanh
+128 64 ReLU
+64 32 Logistic
+32 10 SoftMax
+0 0

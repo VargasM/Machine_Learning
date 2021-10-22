@@ -35,7 +35,7 @@ if __name__ == '__main__':
     y_test = np.reshape(y_test, (y_test.shape[0], 1))
 
     x_train, x_off, x_div = Normalize.Center(x_train)
-    x_test, _, _ = Normalize.Center(x_test)
+    x_test = x_test - x_off
 
     neural_network = FeedForward()
 

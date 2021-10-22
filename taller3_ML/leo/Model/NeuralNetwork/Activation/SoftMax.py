@@ -22,9 +22,8 @@ class SoftMax( Base ):
     if derivative:
       return None
     else:
-      e = softmax(z)
-      #e = numpy.exp(z - numpy.max(z))
-      s = e.sum( )
+      e = numpy.exp(z - numpy.max(z))
+      s = e.sum()
       return e / s
     # end if
   # end def

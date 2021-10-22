@@ -432,8 +432,8 @@ class FeedForward:
                 expected_categories = self.m_Batches[batch][1]
                 for i in range(expected_categories.shape[0]):
                     binary_matrix[i, expected_categories[i, 0]] = 1
-                p = numpy.multiply(binary_matrix, -numpy.log(Yp + self.m_Eps))
-                p = p.sum(axis=1)
+                p = numpy.multiply(binary_matrix, numpy.log(Yp + self.m_Eps))
+                p = -1 * p.sum(axis=1)
                 J = p.mean()
             # end if
 
@@ -475,6 +475,11 @@ class FeedForward:
                     numpy.array(self.m_Model.m_S[-1](Z[-1], derivative=True))
                 D = [d]
             elif self.m_Propagation == 'bce' or self.m_Propagation == 'cce':
+                binary_matrix = numpy.zeros(A[-1].shape)
+                expected_categories = self.m_Batches[batch][1]
+                for i in range(expected_categories.shape[0]):
+                    binary_matrix[i, expected_categories[i, 0]] = 1
+                d = numpy.array(A[-1] - binary_matrix)
                 D = [d]
             else:
                 raise TypeError('Invalid propagation type (' + self.m_Propagation + ')')
