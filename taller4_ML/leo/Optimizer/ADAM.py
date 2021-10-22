@@ -55,12 +55,12 @@ def ADAM(cost, **kwargs):
         # Batch loop
         for batch in range(cost.GetNumberOfBatches()):
             # Compute gradients vector
-            it_cost, gradient = cost.CostAndGradient(args, batch)
+            current_cost, gradient = cost.CostAndGradient(args, batch)
 
             # Apply regularization
             if alpha > 0:
                 if regularization_type == 'ridge':
-                    it_cost += alpha * (np.linalg.norm(np.power(cost.m_model.m_weights, 2)) + cost.m_model.m_bias ** 2)
+                    current_cost += alpha * (np.linalg.norm(np.power(cost.m_model.m_weights, 2)) + cost.m_model.m_bias ** 2)
                     gradient[1:] += (2 * alpha * cost.m_model.m_weights)
                     gradient[0, 0] += (2 * alpha * cost.m_model.m_bias)
 
@@ -83,6 +83,8 @@ def ADAM(cost, **kwargs):
 
             # Execute debug function
             if debug_function is not None:
-                stop = debug_function(cost.GetModel(), it_cost, delta_cost, t, t % debug_step == 0)
+                stop = debug_function(cost.GetModel(), current_cost, delta_cost, t, t % debug_step == 0)
 
         t += 1
+
+    return current_cost

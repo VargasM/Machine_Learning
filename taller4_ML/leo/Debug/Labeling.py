@@ -56,7 +56,6 @@ class Labeling(Cost):
         super().__call__(model, J, dJ, i, show)
 
         if show:
-            print(J)
             z = model(self.m_Data)
             if self.m_Threshold is not None:
                 z = (z >= self.m_Threshold).astype(self.m_DX.dtype)

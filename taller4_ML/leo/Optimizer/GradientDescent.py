@@ -64,6 +64,8 @@ def GradientDescent(cost, **kwargs):
 
     # end while
 
+    return J
+
 # end def
 
 ## eof - $RCSfile$
