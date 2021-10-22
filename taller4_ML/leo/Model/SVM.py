@@ -90,26 +90,24 @@ class SVM(Base):
             m_loss = np.multiply(self.m_Batches[batch][1], m_loss)
             return m_loss
 
-        def _Cost(self, theta, batch, alpha):
+        def _Cost(self, theta, batch):
             j = math.inf
             self.m_model.SetParameters(theta)
             loss_matrix = self.loss_matrix(batch)
 
-            cost = np.where(loss_matrix >= 1, 0, 1 - loss_matrix).mean() + \
-                alpha * (np.linalg.norm(self.m_model.m_weights) ** 2 + self.m_model.m_bias ** 2)
+            cost = np.where(loss_matrix >= 1, 0, 1 - loss_matrix).mean()
             return cost, loss_matrix
 
         # Parameters:
         #  -- theta: new weights and bias
         #  -- batch: current batch index to process
         #  -- alpha: lambda factor for regularization
-        def CostAndGradient(self, theta, batch, alpha):
-            cost, loss_matrix = self._Cost(theta, batch, alpha)
+        def CostAndGradient(self, theta, batch):
+            cost, loss_matrix = self._Cost(theta, batch)
 
-            d_w = np.where(loss_matrix >= 1, 0, np.multiply(-self.m_Batches[batch][1], self.m_Batches[batch][0])).mean() + \
-                (2 * alpha * self.m_model.m_weights)
+            d_w = np.where(loss_matrix >= 1, 0, np.multiply(-self.m_Batches[batch][1], self.m_Batches[batch][0])).mean(axis=0)
+            d_w = d_w.reshape((1, d_w.shape[0]))
 
-            d_b = np.matrix(np.where(loss_matrix >= 1, 0, self.m_Batches[batch][1] * self.m_model.m_bias).mean() +
-                            (2 * alpha * self.m_model.m_bias))
+            d_b = np.matrix(np.where(loss_matrix >= 1, 0, self.m_Batches[batch][1] * self.m_model.m_bias).mean())
 
             return [cost, np.concatenate((d_b, d_w), axis=1)]
