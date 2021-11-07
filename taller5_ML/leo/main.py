@@ -1,4 +1,5 @@
 import math
+import cv2
 import numpy as np
 import pandas as pd
 from Data import Normalize
@@ -15,7 +16,7 @@ def debug_function(model, j, dj, i, show):
 
 if __name__ == '__main__':
     parser = ArgParse()
-    parser.add_argument('network_descriptor', type=str)
+    parser.add_argument('network_descriptors', type=str)
     parser.add_argument('input_data', type=str)
     args = parser.parse_args()
 
@@ -46,6 +47,9 @@ if __name__ == '__main__':
 
     models = []
 
+    # Retrieve descriptors for each network
+    network_descriptors = args.network_descriptors.split("-")
+
     # Then, split the training data in bags
     # Compute the length of each bag
     bag_size = math.floor(x_train.shape[0] / 4)
@@ -63,7 +67,10 @@ if __name__ == '__main__':
 
         # Then, create a model using the bag created
         nn_model = FeedForward()
-        nn_model.LoadParameters(args.network_descriptor)
+        if len(network_descriptors) < 4:
+            nn_model.LoadParameters('./input_data/neural_descriptor/' + network_descriptors[0])
+        else:
+            nn_model.LoadParameters('./input_data/neural_descriptor/' + network_descriptors[i])
 
         # Define the cost function for the current model
         nn_cost = FeedForward.Cost(x_t, y_t, nn_model, batch_size=args.batch_size)

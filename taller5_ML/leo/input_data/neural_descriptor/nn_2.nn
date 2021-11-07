@@ -1,0 +1,5 @@
+draft
+2304 450 Logistic
+450 100 Tanh
+100 1 SoftMax
+0 0

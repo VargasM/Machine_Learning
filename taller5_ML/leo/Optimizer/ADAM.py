@@ -82,9 +82,9 @@ def ADAM(cost, **kwargs):
             m_0 = m_t
             v_0 = v_t
 
-            # Execute debug function
-            if debug_function is not None:
-                stop = debug_function(cost.GetModel(), current_cost, delta_cost, t, t % debug_step == 0)
+        # Execute debug function
+        if debug_function is not None:
+            stop = debug_function(cost.GetModel(), current_cost, delta_cost, t, t % debug_step == 0)
 
         t += 1
 
