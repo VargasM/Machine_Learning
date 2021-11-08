@@ -475,8 +475,17 @@ class FeedForward:
                     numpy.array(d) * \
                     numpy.array(self.m_Model.m_S[-1](Z[-1], derivative=True))
                 D = [d]
-            elif self.m_Propagation == 'bce' or self.m_Propagation == 'cce':
+            elif self.m_Propagation == 'bce':
+                D = [numpy.abs(numpy.round(A[-1]) - self.m_Batches[batch][1])]
+
+            elif self.m_Propagation == 'cce':
+                binary_matrix = numpy.zeros(A[-1].shape)
+                expected_categories = self.m_Batches[batch][1]
+                for i in range(expected_categories.shape[0]):
+                    binary_matrix[i, expected_categories[i, 0]] = 1
+                d = numpy.array(A[-1] - binary_matrix)
                 D = [d]
+
             else:
                 raise TypeError('Invalid propagation type (' + self.m_Propagation + ')')
             # end if

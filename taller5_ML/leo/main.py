@@ -1,5 +1,4 @@
 import math
-import cv2
 import numpy as np
 import pandas as pd
 from Data import Normalize
@@ -32,7 +31,8 @@ if __name__ == '__main__':
             data.append(np.append(np.array(input_data[r, 1].split(" ")), [input_data[r, 0]]))
 
         data = np.array(data, dtype=np.uint8)
-        np.random.shuffle(data)
+        rng = np.random.default_rng()
+        rng.shuffle(data)
 
         np.savetxt('./input_data/input_data.csv', data, delimiter=',', newline='\n', fmt='%u')
 
