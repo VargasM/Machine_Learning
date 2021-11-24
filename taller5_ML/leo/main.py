@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 from Data import Normalize
 from Optimizer.ADAM import ADAM
+from sklearn.decomposition import PCA
 from Data.Algorithms import SplitData
 from Helper.Parser.ArgParse import ArgParse
 from Model.NeuralNetwork.FeedForward import FeedForward
@@ -42,8 +43,19 @@ if __name__ == '__main__':
     # First, split data in training and testing
     x_train, y_train, x_test, y_test, *_ = SplitData(data, 1, train_size=0.8, test_size=0.2)
 
-    # Normalize the data
-    x_train, x_off, x_div = Normalize.Center(x_train)
+    y_train = np.uint8(y_train)
+    y_test = np.uint8(y_test)
+
+    # Normalize the data - Standardize
+    x_train, x_off, x_div = Normalize.Standardize(x_train)
+    x_test, *_ = Normalize.Standardize(x_test)
+
+    # USe sklearn for PCA
+    # pca = PCA(0.95)  # retain 95% of variance
+    # pca.fit(x_train)
+
+    # x_train = pca.transform(x_train)
+    # x_test = pca.transform(x_test)
 
     models = []
 
@@ -58,7 +70,7 @@ if __name__ == '__main__':
         bag_end = bag_begin + bag_size
 
         # create a bag for x and y training
-        if bag_end < data.shape[0]:
+        if bag_end < x_train.shape[0]:
             x_t = x_train[bag_begin:bag_end, :]
             y_t = y_train[bag_begin:bag_end, :]
         else:
@@ -98,11 +110,12 @@ if __name__ == '__main__':
         estimations.append(np.round(model(x_test)))
 
     estimations = np.array(estimations)
-
+    bins = [0, 1, 2]
     average_est = []
     for j in range(estimations.shape[1]):
         models_estimations = estimations[:, j, 0]
-        average_est.append(np.histogram(models_estimations, bins=[0, 1])[0].argmax())
+        max_vote = np.histogram(models_estimations, bins=bins)[0].argmax()
+        average_est.append(bins[max_vote])
 
     y_test = y_test.flatten()
     average_est = np.array(average_est)

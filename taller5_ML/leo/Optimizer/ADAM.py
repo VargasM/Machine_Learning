@@ -59,17 +59,16 @@ def ADAM(cost, **kwargs):
 
             # Apply regularization
             if alpha > 0:
-                if regularization_type == 'ridge':
-                    current_cost += alpha * (
-                                np.linalg.norm(np.power(cost.m_model.m_weights, 2)) + cost.m_model.m_bias ** 2)
-                    gradient[1:] += (2 * alpha * cost.m_model.m_weights)
-                    gradient[0, 0] += (2 * alpha * cost.m_model.m_bias)
+                current_cost += alpha * (
+                            np.linalg.norm(np.power(cost.m_Model.m_W, 2)) + cost.m_Model.m_B ** 2)
+                gradient[1:] += (2 * alpha * cost.m_Model.m_W)
+                gradient[0, 0] += (2 * alpha * cost.m_Model.m_B)
 
             # Update biased first moment estimate
-            m_t = (b1 * m_0) + (1 - b1) * gradient
+            m_t = (b1 * m_0) + ((1 - b1) * gradient)
 
             # Update biased second raw moment estimate
-            v_t = (b2 * v_0) + (1 - b2) * np.multiply(gradient, gradient)
+            v_t = (b2 * v_0) + ((1 - b2) * np.power(gradient, 2))
 
             # Compute bias-corrected first moment estimate
             m_t_corrected = m_t / (1 - b1 ** t)

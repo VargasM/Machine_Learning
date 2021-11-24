@@ -1,5 +1,6 @@
 draft
-2304 500 Tanh
-500 50 Logistic
-50 1 SoftMax
+576 150 Tanh
+150 50 Logistic
+50 10 Tanh
+10 1 Logistic
 0 0

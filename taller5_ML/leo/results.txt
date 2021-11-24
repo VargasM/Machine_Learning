@@ -1,0 +1,19 @@
+Learning-rate   batch-size   num-iterations   Regularization   Regularization-type   Architecture   Model Accuracy      Cost
+    1e-2           1024            50              N/A                N/A            2304 500 Tanh
+                                                                                    500 50 Logistic
+                                                                                     50 1 SoftMax
+
+                                                                                    2304 450 Logistic
+                                                                                      450 100 Tanh
+                                                                                     100 1 SoftMax       52.60%         8.95
+
+                                                                                     2304 700 Tanh
+                                                                                    700 20 Logistic
+                                                                                     20 1 SoftMax
+
+                                                                                     2304 300 Tanh
+                                                                                    300 150 Logistic
+                                                                                     150 1 SoftMax
+
+    1e-3            512           100              N/A               N/A              nn_1.nn           52.60%          7.58
+    1e-4            512           100              N/A               N/A              nn_1.nn           52.60%          7.58
