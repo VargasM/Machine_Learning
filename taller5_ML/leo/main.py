@@ -64,9 +64,9 @@ if __name__ == '__main__':
 
     # Then, split the training data in bags
     # Compute the length of each bag
-    bag_size = math.floor(x_train.shape[0] / 4)
+    bag_size = math.floor(x_train.shape[0] / 5)
     bag_begin = 0
-    for i in range(4):
+    for i in range(5):
         bag_end = bag_begin + bag_size
 
         # create a bag for x and y training

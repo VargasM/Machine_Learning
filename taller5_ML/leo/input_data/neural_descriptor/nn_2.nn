@@ -1,6 +1,6 @@
 draft
-576 100 Logistic
-75 20 Logistic
-20 5 Tanh
-5 1 Logistic
+576 150 Tanh
+150 50 Logistic
+50 10 ArcTan
+10 1 Logistic
 0 0
