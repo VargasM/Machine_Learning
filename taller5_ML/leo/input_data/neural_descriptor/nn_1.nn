@@ -1,6 +1,6 @@
 draft
 576 150 Tanh
-150 50 Logistic
-50 10 Tanh
+150 50 Tanh
+50 10 Logistic
 10 1 Logistic
 0 0

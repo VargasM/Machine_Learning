@@ -59,10 +59,13 @@ def ADAM(cost, **kwargs):
 
             # Apply regularization
             if alpha > 0:
-                current_cost += alpha * (
-                            np.linalg.norm(np.power(cost.m_Model.m_W, 2)) + cost.m_Model.m_B ** 2)
-                gradient[1:] += (2 * alpha * cost.m_Model.m_W)
-                gradient[0, 0] += (2 * alpha * cost.m_Model.m_B)
+                if regularization_type == 'ridge':
+                    current_cost += alpha * args @ args.T
+                    gradient += 2.0 * alpha * args
+                elif regularization_type == 'lasso':
+                    current_cost += alpha * np.abs(args).sum()
+                    gradient += alpha * (args > 0).astype(gradient.dtype).sum()
+                    gradient -= alpha * (args < 0).astype(gradient.dtype).sum()
 
             # Update biased first moment estimate
             m_t = (b1 * m_0) + ((1 - b1) * gradient)
